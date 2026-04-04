@@ -1,0 +1,11 @@
+{
+  "id" : "fc81b465-cad0-42ba-82bd-7b5a558486a0",
+  "name" : "CP",
+  "ownerUserId" : "ed52808c-0418-42c1-8121-dbf402fd1b20",
+  "memberUserIds" : [ "ed52808c-0418-42c1-8121-dbf402fd1b20", "545393ea-89c5-4caf-87a0-30a6d0132b93" ],
+  "rolesByUserId" : {
+    "ed52808c-0418-42c1-8121-dbf402fd1b20" : "OWNER",
+    "545393ea-89c5-4caf-87a0-30a6d0132b93" : "MEMBER"
+  },
+  "createdAt" : "2026-03-03T18:04:56.397066800Z"
+}

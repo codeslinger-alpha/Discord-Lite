@@ -1,0 +1,13 @@
+{
+  "id" : "43c10acb-e6d9-4a1a-884b-8394cef9d751",
+  "name" : "GTPJAWQ6",
+  "ownerUserId" : "a2107581-1f70-4fb0-86b7-04662d8bb2a1",
+  "memberUserIds" : [ "a2107581-1f70-4fb0-86b7-04662d8bb2a1" ],
+  "rolesByUserId" : {
+    "a2107581-1f70-4fb0-86b7-04662d8bb2a1" : "OWNER"
+  },
+  "createdAt" : "2026-04-02T22:32:27.156545500Z",
+  "inviteCode" : "A4ZHMACJ",
+  "iconImageBase64" : null,
+  "coverImageBase64" : null
+}

@@ -1,0 +1,10 @@
+{
+  "id" : "0d47a59b-4370-42ed-a8d5-8f2ae1d86f42",
+  "name" : "New",
+  "ownerUserId" : "545393ea-89c5-4caf-87a0-30a6d0132b93",
+  "memberUserIds" : [ "545393ea-89c5-4caf-87a0-30a6d0132b93" ],
+  "rolesByUserId" : {
+    "545393ea-89c5-4caf-87a0-30a6d0132b93" : "OWNER"
+  },
+  "createdAt" : "2026-03-03T18:53:04.580173800Z"
+}

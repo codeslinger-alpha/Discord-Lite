@@ -1,0 +1,12 @@
+{
+  "id" : "513cc9c8-59df-45c1-b56e-25bf155c50bd",
+  "name" : "New Server",
+  "ownerUserId" : "78e36e65-e2b5-42c7-b260-c6a0a25ffc01",
+  "memberUserIds" : [ "78e36e65-e2b5-42c7-b260-c6a0a25ffc01", "c0cc74f1-36da-4f6b-9df4-62682c84cfd0" ],
+  "rolesByUserId" : {
+    "78e36e65-e2b5-42c7-b260-c6a0a25ffc01" : "OWNER",
+    "c0cc74f1-36da-4f6b-9df4-62682c84cfd0" : "MEMBER"
+  },
+  "createdAt" : "2026-03-04T05:34:16.676162100Z",
+  "inviteCode" : "HVSZX467"
+}
