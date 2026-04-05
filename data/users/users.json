@@ -1,4 +1,18 @@
 [ {
+  "id" : "61b92414-efc3-4184-a61c-c3890f5f0f60",
+  "name" : "Arman",
+  "username" : "arman",
+  "passwordHash" : "0bYFSLhB5aaExC+Lj3oB7OWGGZ7FcsGmeSpQaeTWLig=",
+  "salt" : "/a27GSX2LgpQjwSIEoK48w==",
+  "profileImageBase64" : null,
+  "blockedUserIds" : [ ],
+  "lastReadChannelAtByKey" : { },
+  "lastReadDmAtByPeerUserId" : {
+    "78e36e65-e2b5-42c7-b260-c6a0a25ffc01" : "2026-04-04T16:21:43.562929Z"
+  },
+  "status" : "ACTIVE",
+  "createdAt" : "2026-04-04T16:21:25.016251800Z"
+}, {
   "id" : "c0cc74f1-36da-4f6b-9df4-62682c84cfd0",
   "name" : "Das",
   "username" : "Das",
@@ -34,16 +48,17 @@
     "c16d6fb0-4455-489f-bde0-6bb31c72f6a1:dfd8b637-4aa6-4b63-8685-ea73fb3898af" : "2026-04-02T23:58:08.180574500Z",
     "d7729dd9-3ff6-43d1-8f17-af2e0ea8441a:c2e1d900-abee-442a-9b8b-ea368f1bc3b4" : "2026-04-04T13:02:46.314890500Z",
     "c16d6fb0-4455-489f-bde0-6bb31c72f6a1:292b462f-376d-4d2e-9f8d-1bcb4ae3eaff" : "2026-04-04T15:32:42.744045500Z",
-    "c16d6fb0-4455-489f-bde0-6bb31c72f6a1:3d4a09a3-2f99-48bd-8421-6887a7256860" : "2026-04-04T14:08:23.505216300Z",
+    "c16d6fb0-4455-489f-bde0-6bb31c72f6a1:3d4a09a3-2f99-48bd-8421-6887a7256860" : "2026-04-05T16:47:04.743156800Z",
     "c16d6fb0-4455-489f-bde0-6bb31c72f6a1:9bf86e55-0546-43cf-a3d3-3e663e8e8b55" : "2026-04-02T23:58:08.180574500Z",
     "513cc9c8-59df-45c1-b56e-25bf155c50bd:c85524be-caf3-437d-9108-60cce649c68b" : "2026-03-04T05:35:39.594478600Z"
   },
   "lastReadDmAtByPeerUserId" : {
     "0dd77335-01f7-4f9e-a990-e82d042a2e08" : "2026-04-04T13:54:17.794896Z",
-    "c0cc74f1-36da-4f6b-9df4-62682c84cfd0" : "2026-04-04T12:37:26.780245400Z",
+    "c0cc74f1-36da-4f6b-9df4-62682c84cfd0" : "2026-04-05T16:50:56.137626200Z",
     "a2107581-1f70-4fb0-86b7-04662d8bb2a1" : "2026-04-04T15:31:41.612952100Z",
     "363aff65-c6fc-43d9-9e22-e0cdfafa977d" : "2026-04-03T06:29:05.468248400Z",
-    "d8ed405c-735d-4d0e-ac8f-0a16bd94797c" : "2026-04-04T13:00:50.695213700Z"
+    "d8ed405c-735d-4d0e-ac8f-0a16bd94797c" : "2026-04-04T13:00:50.695213700Z",
+    "61b92414-efc3-4184-a61c-c3890f5f0f60" : "2026-04-04T16:21:43.562929Z"
   },
   "status" : "DO_NOT_DISTURB",
   "createdAt" : "2026-03-03T17:39:43.288106700Z"

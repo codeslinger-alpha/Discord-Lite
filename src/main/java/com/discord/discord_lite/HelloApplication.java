@@ -1149,11 +1149,28 @@ public class HelloApplication extends Application {
                 avatarWrap.getStyleClass().add("member-avatar-wrap");
                 StackPane.setAlignment(presence, Pos.BOTTOM_RIGHT);
 
+                WorkspaceServer server = selectedServer().orElse(null);
+                Role memberRole = server == null ? Role.MEMBER : server.roleOf(user.getId());
+
                 Label name = new Label(displayName(user));
                 name.getStyleClass().add("member-name");
                 if (!user.isOnline()) {
                     name.getStyleClass().add("member-name-offline");
                     avatarWrap.getStyleClass().add("member-avatar-wrap-offline");
+                }
+
+                HBox nameRow = new HBox(6);
+                nameRow.setAlignment(Pos.CENTER_LEFT);
+                nameRow.getStyleClass().add("member-name-row");
+                nameRow.getChildren().add(name);
+                if (memberRole == Role.ADMIN || memberRole == Role.OWNER) {
+                    String roleLabel = serverRoleLabel(server, user.getId());
+                    FontIcon crown = createIcon("fas-crown", "member-role-crown");
+                    if (!user.isOnline()) {
+                        crown.getStyleClass().add("member-role-crown-offline");
+                    }
+                    Tooltip.install(crown, new Tooltip(roleLabel));
+                    nameRow.getChildren().add(crown);
                 }
 
                 Region spacer = new Region();
@@ -1168,11 +1185,11 @@ public class HelloApplication extends Application {
                     ? new HBox(
                         10,
                         avatarWrap,
-                        name,
+                        nameRow,
                         spacer,
                         createMemberDmButton(user)
                     )
-                    : new HBox(10, avatarWrap, name, spacer);
+                    : new HBox(10, avatarWrap, nameRow, spacer);
                 row.setAlignment(Pos.CENTER_LEFT);
                 row.getStyleClass().add("member-row");
                 if (!user.isOnline()) {
@@ -1181,7 +1198,12 @@ public class HelloApplication extends Application {
 
                 setText(null);
                 setGraphic(row);
-                setTooltip(new Tooltip(displayName(user) + " (" + statusLabelFor(user) + ")"));
+                String tooltipText = displayName(user) + " (" + statusLabelFor(user);
+                if (memberRole != Role.MEMBER) {
+                    tooltipText += " • " + serverRoleLabel(server, user.getId());
+                }
+                tooltipText += ")";
+                setTooltip(new Tooltip(tooltipText));
             }
         });
 
@@ -3014,7 +3036,11 @@ public class HelloApplication extends Application {
             return null;
         }
         int firstCodePoint = content.codePointAt(startIndex);
-        if (!isEmojiStartCodePoint(firstCodePoint)) {
+        boolean keycapBase = isKeycapBase(firstCodePoint);
+        if (keycapBase && !formsKeycapEmoji(content, startIndex, firstCodePoint)) {
+            return null;
+        }
+        if (!isEmojiStartCodePoint(firstCodePoint, keycapBase)) {
             return null;
         }
 
@@ -3029,7 +3055,7 @@ public class HelloApplication extends Application {
             return content.substring(startIndex, endIndex);
         }
 
-        if (isKeycapBase(firstCodePoint)) {
+        if (keycapBase) {
             int cursor = endIndex;
             if (cursor < content.length() && content.codePointAt(cursor) == 0xFE0F) {
                 cursor += Character.charCount(0xFE0F);
@@ -3052,7 +3078,7 @@ public class HelloApplication extends Application {
                     break;
                 }
                 int joinedCodePoint = content.codePointAt(cursor);
-                if (!isEmojiStartCodePoint(joinedCodePoint)) {
+                if (!isEmojiStartCodePoint(joinedCodePoint, isKeycapBase(joinedCodePoint))) {
                     endIndex = joinerIndex;
                     break;
                 }
@@ -3082,13 +3108,25 @@ public class HelloApplication extends Application {
         return false;
     }
 
-    private boolean isEmojiStartCodePoint(int codePoint) {
+    private boolean formsKeycapEmoji(String content, int startIndex, int baseCodePoint) {
+        if (content == null || startIndex < 0 || startIndex >= content.length() || !isKeycapBase(baseCodePoint)) {
+            return false;
+        }
+
+        int cursor = startIndex + Character.charCount(baseCodePoint);
+        if (cursor < content.length() && content.codePointAt(cursor) == 0xFE0F) {
+            cursor += Character.charCount(0xFE0F);
+        }
+        return cursor < content.length() && content.codePointAt(cursor) == 0x20E3;
+    }
+
+    private boolean isEmojiStartCodePoint(int codePoint, boolean keycapBase) {
         if (codePoint < 0) {
             return false;
         }
         return Character.getType(codePoint) == Character.OTHER_SYMBOL
             || isRegionalIndicator(codePoint)
-            || isKeycapBase(codePoint);
+            || keycapBase;
     }
 
     private boolean isRegionalIndicator(int codePoint) {

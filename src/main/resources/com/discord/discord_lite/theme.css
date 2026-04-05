@@ -1710,6 +1710,19 @@
     -fx-text-fill: #80858f;
 }
 
+.member-name-row {
+    -fx-alignment: center-left;
+}
+
+.member-role-crown {
+    -fx-icon-color: #f0b232;
+    -fx-icon-size: 11px;
+}
+
+.member-role-crown-offline {
+    -fx-icon-color: #9e8a55;
+}
+
 .member-avatar-wrap-offline {
     -fx-opacity: 0.78;
 }
