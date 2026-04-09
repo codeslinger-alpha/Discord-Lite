@@ -59,6 +59,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -125,14 +127,6 @@ public class HelloApplication extends Application {
     private static final int MESSAGE_ATTACHMENT_TOTAL_MAX_BYTES = 24_000_000;
 
     private final LanClientService service = new LanClientService();
-    private final ListView<WorkspaceServer> serverListView = new ListView<>();
-    private final ListView<Object> channelListView = new ListView<>();
-    private final ListView<UserSummary> dmListView = new ListView<>();
-    private final ListView<Object> memberListView = new ListView<>();
-    private final ListView<Object> messageListView = new ListView<>();
-    private final TextField messageInput = new TextField();
-    private final TextFlow messageInputPreview = new TextFlow();
-    private final TextField memberSearchField = new TextField();
     private final List<MessageAttachment> pendingComposerAttachments = new ArrayList<>();
     private String composerAttachmentConversationKey;
     private final List<UserSummary> allChannelMembers = new ArrayList<>();
@@ -142,8 +136,6 @@ public class HelloApplication extends Application {
     private final ContextMenu mentionSuggestionPopup = new ContextMenu();
     private final List<MentionSuggestion> activeMentionSuggestions = new ArrayList<>();
     private final Label sessionLabel = new Label("Disconnected");
-    private final Label channelLabel = new Label("No conversation selected");
-    private final Label typingLabel = new Label("");
     private final Label unreadLabel = new Label("Unread: 0");
 
     private final PauseTransition typingPause = new PauseTransition(Duration.seconds(1.2));
@@ -155,50 +147,67 @@ public class HelloApplication extends Application {
     private Node welcomePageRoot;
     private Node loginPageRoot;
     private Node registerPageRoot;
-    private TextField loginHostField;
-    private TextField loginPortField;
-    private TextField loginUsernameField;
-    private PasswordField loginPasswordField;
-    private Label loginErrorLabel;
-    private TextField registerHostField;
-    private TextField registerPortField;
-    private TextField registerNameField;
-    private TextField registerUsernameField;
-    private PasswordField registerPasswordField;
-    private PasswordField registerConfirmPasswordField;
-    private Label registerErrorLabel;
-    private Label registerUsernameHintLabel;
-    private StackPane registerAvatarPreview;
+    @FXML private ListView<WorkspaceServer> serverListView;
+    @FXML private ListView<Object> channelListView;
+    @FXML private ListView<UserSummary> dmListView;
+    @FXML private ListView<Object> memberListView;
+    @FXML private ListView<Object> messageListView;
+    @FXML private TextField messageInput;
+    @FXML private TextFlow messageInputPreview;
+    @FXML private TextField memberSearchField;
+    @FXML private Label channelLabel;
+    @FXML private Label typingLabel;
+    @FXML private TextField loginHostField;
+    @FXML private TextField loginPortField;
+    @FXML private TextField loginUsernameField;
+    @FXML private PasswordField loginPasswordField;
+    @FXML private Label loginErrorLabel;
+    @FXML private TextField registerHostField;
+    @FXML private TextField registerPortField;
+    @FXML private TextField registerNameField;
+    @FXML private TextField registerUsernameField;
+    @FXML private PasswordField registerPasswordField;
+    @FXML private PasswordField registerConfirmPasswordField;
+    @FXML private Label registerErrorLabel;
+    @FXML private Label registerUsernameHintLabel;
+    @FXML private StackPane registerAvatarPreview;
     private String registerSelectedAvatarBase64;
-    private Button dmHomeButton;
-    private Button contextSettingsButton;
-    private Label contextHeaderLabel;
-    private Button contextActionButton;
-    private Button contextGroupActionButton;
-    private Button contextInviteButton;
-    private VBox channelSectionPane;
-    private VBox dmSectionPane;
-    private StackPane serverBannerPane;
-    private VBox memberPane;
-    private VBox channelMemberPane;
-    private VBox dmProfilePane;
-    private VBox dmProfileContent;
-    private SplitPane messageMemberSplit;
-    private Label memberHeaderLabel;
-    private StackPane userBarAvatarPane;
-    private StackPane messageInputStack;
-    private Label userBarNameLabel;
-    private Label userBarStatusLabel;
+    @FXML private Button dmHomeButton;
+    @FXML private Button createServerRailButton;
+    @FXML private Button joinServerRailButton;
+    @FXML private Button contextSettingsButton;
+    @FXML private Label contextHeaderLabel;
+    @FXML private Button contextActionButton;
+    @FXML private Button contextGroupActionButton;
+    @FXML private Button contextInviteButton;
+    @FXML private VBox channelSectionPane;
+    @FXML private VBox dmSectionPane;
+    @FXML private StackPane serverBannerPane;
+    @FXML private VBox memberPane;
+    @FXML private VBox channelMemberPane;
+    @FXML private VBox dmProfilePane;
+    @FXML private VBox dmProfileContent;
+    @FXML private SplitPane messageMemberSplit;
+    @FXML private Label memberHeaderLabel;
+    @FXML private StackPane userBarAvatarPane;
+    @FXML private StackPane messageInputStack;
+    @FXML private Label userBarNameLabel;
+    @FXML private Label userBarStatusLabel;
     private Region userBarStatusIndicator;
-    private Button userBarPresenceButton;
-    private HBox composerBar;
-    private HBox composerReplyBar;
-    private FlowPane composerAttachmentPane;
-    private Label composerReplyLabel;
-    private Label composerReplySnippetLabel;
-    private VBox composerBlockedPane;
-    private Label composerBlockedLabel;
-    private Button composerBlockedActionButton;
+    @FXML private Button userBarPresenceButton;
+    @FXML private Button editProfileButton;
+    @FXML private Button logoutButton;
+    @FXML private HBox composerBar;
+    @FXML private HBox composerReplyBar;
+    @FXML private StackPane composerReplyIconPane;
+    @FXML private Button clearReplyButton;
+    @FXML private FlowPane composerAttachmentPane;
+    @FXML private Label composerReplyLabel;
+    @FXML private Label composerReplySnippetLabel;
+    @FXML private VBox composerBlockedPane;
+    @FXML private Label composerBlockedLabel;
+    @FXML private Button composerBlockedActionButton;
+    @FXML private Button attachButton;
     private String activeHost = "127.0.0.1";
     private int activePort = 5555;
     private String selectedServerId;
@@ -238,13 +247,15 @@ public class HelloApplication extends Application {
         typingPause.setOnFinished(event -> stopLocalTyping());
         themeStylesheet = HelloApplication.class.getResource("theme.css").toExternalForm();
 
+        chatPageRoot = loadPage("chat-page.fxml", BorderPane.class);
+        loginPageRoot = loadPage("login-page.fxml", Node.class);
+        registerPageRoot = loadPage("register-page.fxml", Node.class);
+        welcomePageRoot = loadPage("welcome-page.fxml", Node.class);
+
+        initializeInjectedPages();
         configureMentionSuggestions();
         configureListRenderers();
         configureSelectionListeners();
-        chatPageRoot = buildChatPage();
-        welcomePageRoot = buildWelcomePage();
-        loginPageRoot = buildLoginPage();
-        registerPageRoot = buildRegisterPage();
 
         pageContainer = new StackPane();
         pageContainer.getStyleClass().add("page-container");
@@ -262,6 +273,221 @@ public class HelloApplication extends Application {
     public void stop() {
         emojiImageLoader.shutdownNow();
         service.disconnect();
+    }
+
+    private <T extends Node> T loadPage(String resourceName, Class<T> rootType) {
+        FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource(resourceName));
+        loader.setController(this);
+        try {
+            return rootType.cast(loader.load());
+        } catch (IOException ex) {
+            throw new IllegalStateException("Failed to load page: " + resourceName, ex);
+        }
+    }
+
+    private void initializeInjectedPages() {
+        initializeLoginPage();
+        initializeRegisterPage();
+        initializeChatPage();
+    }
+
+    private void initializeLoginPage() {
+        if (loginHostField == null || loginPortField == null) {
+            return;
+        }
+        loginHostField.setText(activeHost);
+        loginPortField.setText(Integer.toString(activePort));
+    }
+
+    private void initializeRegisterPage() {
+        if (registerHostField == null || registerPortField == null) {
+            return;
+        }
+        registerHostField.setText(activeHost);
+        registerPortField.setText(Integer.toString(activePort));
+        registerNameField.textProperty().addListener((obs, oldValue, newValue) -> refreshRegisterAvatarPreview());
+        refreshRegisterAvatarPreview();
+    }
+
+    private void initializeChatPage() {
+        if (serverListView == null || dmHomeButton == null) {
+            return;
+        }
+
+        initializeRailIconButton(dmHomeButton, "fas-comments", "Home (Direct Messages)");
+        initializeIconButton(createServerRailButton, "fas-plus", "rail-action-icon", "Create server");
+        initializeIconButton(joinServerRailButton, "fas-compass", "rail-action-icon", "Join server");
+        initializeIconButton(contextActionButton, "fas-plus", "rail-action-icon", "New direct message");
+        initializeIconButton(contextGroupActionButton, "fas-folder-plus", "rail-action-icon", "Create channel group");
+        initializeIconButton(contextInviteButton, "fas-user-plus", "rail-action-icon", "Invite people");
+        initializeIconButton(contextSettingsButton, "fas-cog", "rail-action-icon", "Server settings");
+        initializeIconButton(attachButton, "fas-paperclip", "composer-attach-icon", "Attach files");
+        initializeIconButton(clearReplyButton, "fas-times", "composer-reply-close-icon", null);
+        initializeIconButton(editProfileButton, "fas-cog", "rail-action-icon", "Profile settings");
+        initializeIconButton(logoutButton, "fas-sign-out-alt", "rail-action-icon", "Logout");
+
+        if (composerReplyIconPane != null) {
+            composerReplyIconPane.getChildren().setAll(createIcon("fas-reply", "composer-reply-icon"));
+        }
+
+        if (userBarAvatarPane != null) {
+            userBarStatusIndicator = new Region();
+            userBarStatusIndicator.getStyleClass().addAll("user-bar-status-indicator", "user-bar-status-invisible");
+            StackPane.setAlignment(userBarStatusIndicator, Pos.BOTTOM_RIGHT);
+            StackPane.setMargin(userBarStatusIndicator, new Insets(0, -1, -1, 0));
+            refreshUserBarAvatar(null);
+        }
+
+        if (messageInput != null) {
+            messageInput.textProperty().addListener((obs, oldValue, newValue) -> {
+                refreshComposerPreview(newValue);
+                refreshMentionSuggestions();
+                onComposerChanged(newValue);
+            });
+            messageInput.caretPositionProperty().addListener((obs, oldValue, newValue) -> refreshMentionSuggestions());
+            messageInput.focusedProperty().addListener((obs, oldValue, focused) -> {
+                refreshMessageInputStackState();
+                if (!focused) {
+                    hideMentionSuggestions();
+                } else {
+                    refreshMentionSuggestions();
+                }
+            });
+            messageInput.addEventFilter(KeyEvent.KEY_PRESSED, this::handleComposerKeyPressed);
+        }
+
+        if (messageInputPreview != null) {
+            messageInputPreview.setLineSpacing(1);
+            messageInputPreview.setMouseTransparent(true);
+        }
+        if (messageInputPreview != null && messageInputStack != null) {
+            messageInputPreview.prefWidthProperty().bind(Bindings.max(0.0, messageInputStack.widthProperty().subtract(24)));
+        }
+
+        if (memberSearchField != null) {
+            memberSearchField.textProperty().addListener((obs, oldValue, newValue) -> applyMemberFilter());
+        }
+
+        refreshMessageInputStackState();
+        refreshComposerPreview(messageInput == null ? "" : messageInput.getText());
+        refreshComposerAttachmentsUi();
+        updateMessagePlaceholder();
+        updateDmHomeButtonState();
+        updateContextSidebarMode();
+        refreshMembers();
+        refreshComposerState();
+    }
+
+    private void initializeIconButton(Button button, String iconLiteral, String iconStyleClass, String tooltipText) {
+        if (button == null) {
+            return;
+        }
+        button.setText(null);
+        button.setGraphic(createIcon(iconLiteral, iconStyleClass));
+        button.setFocusTraversable(false);
+        button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        applyTooltip(button, tooltipText);
+    }
+
+    private void initializeRailIconButton(Button button, String iconLiteral, String tooltipText) {
+        if (button == null) {
+            return;
+        }
+
+        Region activePill = new Region();
+        activePill.getStyleClass().add("server-active-pill");
+
+        Region unreadDot = new Region();
+        unreadDot.getStyleClass().add("rail-unread-dot");
+        unreadDot.setVisible(false);
+        unreadDot.setManaged(false);
+
+        StackPane iconWrap = new StackPane(createIcon(iconLiteral, "server-avatar-icon"), unreadDot);
+        iconWrap.getStyleClass().add("server-avatar-wrap");
+        StackPane.setAlignment(unreadDot, Pos.TOP_RIGHT);
+        StackPane.setMargin(unreadDot, new Insets(4, 4, 0, 0));
+
+        HBox row = new HBox(8, activePill, iconWrap);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.getStyleClass().add("server-row");
+
+        button.setGraphic(row);
+        button.setText(null);
+        button.setFocusTraversable(false);
+        button.getProperties().put("activePill", activePill);
+        button.getProperties().put("tileWrapper", iconWrap);
+        button.getProperties().put("unreadDot", unreadDot);
+        button.hoverProperty().addListener((obs, oldValue, newValue) -> {
+            boolean selected = Boolean.TRUE.equals(button.getProperties().get("selected"));
+            animateServerTabState(iconWrap, activePill, selected, newValue);
+        });
+        applyTooltip(button, tooltipText);
+    }
+
+    @FXML
+    private void showWelcomePageFromLogin() {
+        clearAuthErrors();
+        switchPage(AppPage.WELCOME, true);
+    }
+
+    @FXML
+    private void showRegisterPageFromLogin() {
+        clearAuthErrors();
+        copyLoginConnectionToRegister();
+        switchPage(AppPage.REGISTER, true);
+    }
+
+    @FXML
+    private void showWelcomePageFromRegister() {
+        clearAuthErrors();
+        switchPage(AppPage.WELCOME, true);
+    }
+
+    @FXML
+    private void showLoginPageFromRegister() {
+        clearAuthErrors();
+        copyRegisterConnectionToLogin();
+        switchPage(AppPage.LOGIN, true);
+    }
+
+    @FXML
+    private void showLoginPageFromWelcome() {
+        clearAuthErrors();
+        switchPage(AppPage.LOGIN, true);
+    }
+
+    @FXML
+    private void showRegisterPageFromWelcome() {
+        clearAuthErrors();
+        switchPage(AppPage.REGISTER, true);
+    }
+
+    @FXML
+    private void chooseRegisterAvatarFromPage() {
+        try {
+            String nextAvatar = chooseImageBase64("Choose Profile Picture", PROFILE_IMAGE_MAX_BYTES, "Profile picture");
+            if (nextAvatar != null) {
+                registerSelectedAvatarBase64 = nextAvatar;
+                refreshRegisterAvatarPreview();
+            }
+        } catch (IllegalArgumentException | IOException ex) {
+            setAuthError(registerErrorLabel, rootMessage(ex));
+        }
+    }
+
+    @FXML
+    private void clearRegisterAvatarFromPage() {
+        registerSelectedAvatarBase64 = null;
+        refreshRegisterAvatarPreview();
+    }
+
+    @FXML
+    private void onContextPrimaryAction() {
+        if (dmHomeSelected) {
+            openDm();
+        } else {
+            createChannel();
+        }
     }
 
     private BorderPane buildChatPage() {
@@ -1571,6 +1797,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void clearComposerReply() {
         composerReplyTarget = null;
         refreshComposerReplyUi();
@@ -1593,6 +1820,7 @@ public class HelloApplication extends Application {
         composerReplySnippetLabel.setText(visible ? composerReplyTarget.previewText() : "");
     }
 
+    @FXML
     private void chooseComposerAttachments() {
         if (pageContainer == null || pageContainer.getScene() == null) {
             return;
@@ -4110,6 +4338,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void suggestUsernameFromRegister() {
         clearAuthErrors();
         String host = registerHostField.getText() == null ? "" : registerHostField.getText().trim();
@@ -4246,6 +4475,7 @@ public class HelloApplication extends Application {
         });
     }
 
+    @FXML
     private void selectDmHome() {
         dmHomeSelected = true;
         clearMessageEditState(false);
@@ -4465,6 +4695,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void loginFromPage() {
         clearAuthErrors();
         String host = loginHostField.getText() == null ? "" : loginHostField.getText().trim();
@@ -4498,6 +4729,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void registerFromPage() {
         clearAuthErrors();
         String host = registerHostField.getText() == null ? "" : registerHostField.getText().trim();
@@ -4545,6 +4777,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void logout() {
         stopLocalTyping();
         service.logout();
@@ -4631,6 +4864,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void createServer() {
         showTextInputModal(
             "Create Server",
@@ -4660,6 +4894,7 @@ public class HelloApplication extends Application {
         );
     }
 
+    @FXML
     private void joinServer() {
         showTextInputModal(
             "Join Server",
@@ -4691,6 +4926,7 @@ public class HelloApplication extends Application {
         showServerInviteModal();
     }
 
+    @FXML
     private void showServerInviteModal() {
         if (pageContainer == null) {
             return;
@@ -5095,6 +5331,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void createChannelGroup() {
         if (selectedServerId == null) {
             showError("Select a server first");
@@ -5167,6 +5404,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void sendMessage() {
         hideMentionSuggestions();
         String content = messageInput.getText() == null ? "" : messageInput.getText();
@@ -6130,6 +6368,7 @@ public class HelloApplication extends Application {
         }
     }
 
+    @FXML
     private void showEditProfileModal() {
         if (pageContainer == null || service.currentUser().isEmpty()) {
             return;
@@ -6347,6 +6586,7 @@ public class HelloApplication extends Application {
         Platform.runLater(nameField::requestFocus);
     }
 
+    @FXML
     private void showServerSettingsModal() {
         if (pageContainer == null) {
             return;
@@ -6897,6 +7137,7 @@ public class HelloApplication extends Application {
         return Base64.getEncoder().encodeToString(bytes);
     }
 
+    @FXML
     private void showStatusPickerModal() {
         if (pageContainer == null || service.currentUser().isEmpty()) {
             return;

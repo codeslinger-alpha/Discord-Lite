@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" styleClass="app-root">
+    <center>
+        <SplitPane dividerPositions="0.32" styleClass="main-split">
+            <items>
+                <HBox styleClass="left-columns">
+                    <children>
+                        <VBox minWidth="104" prefWidth="104" spacing="10" styleClass="server-rail">
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10" />
+                            </padding>
+                            <children>
+                                <Button fx:id="dmHomeButton" onAction="#selectDmHome" styleClass="server-icon-button" />
+                                <ListView fx:id="serverListView" focusTraversable="false" styleClass="server-list" VBox.vgrow="ALWAYS" />
+                                <VBox alignment="CENTER" spacing="8" styleClass="rail-actions">
+                                    <children>
+                                        <Button fx:id="createServerRailButton" onAction="#createServer" styleClass="rail-action-button" />
+                                        <Button fx:id="joinServerRailButton" onAction="#joinServer" styleClass="rail-action-button" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                        <VBox prefWidth="300" spacing="10" styleClass="conversation-rail" HBox.hgrow="ALWAYS">
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10" />
+                            </padding>
+                            <children>
+                                <HBox spacing="8" styleClass="context-header">
+                                    <children>
+                                        <Label fx:id="contextHeaderLabel" text="DIRECT MESSAGES" styleClass="sidebar-heading" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button fx:id="contextSettingsButton" onAction="#showServerSettingsModal" styleClass="rail-action-button,context-action" visible="false" managed="false" />
+                                        <Button fx:id="contextInviteButton" onAction="#showServerInviteModal" styleClass="rail-action-button,context-action" visible="false" managed="false" />
+                                        <Button fx:id="contextGroupActionButton" onAction="#createChannelGroup" styleClass="rail-action-button,context-action" visible="false" managed="false" />
+                                        <Button fx:id="contextActionButton" onAction="#onContextPrimaryAction" styleClass="rail-action-button,context-action" />
+                                    </children>
+                                </HBox>
+                                <StackPane styleClass="context-stack" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <VBox fx:id="channelSectionPane" spacing="10" styleClass="sidebar-section">
+                                            <children>
+                                                <StackPane fx:id="serverBannerPane" styleClass="server-banner" visible="false" managed="false" />
+                                                <ListView fx:id="channelListView" focusTraversable="false" styleClass="channel-list" VBox.vgrow="ALWAYS" />
+                                            </children>
+                                        </VBox>
+                                        <VBox fx:id="dmSectionPane" styleClass="sidebar-section">
+                                            <children>
+                                                <ListView fx:id="dmListView" focusTraversable="false" styleClass="dm-list" VBox.vgrow="ALWAYS" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </StackPane>
+                                <HBox alignment="CENTER_LEFT" spacing="8" styleClass="user-bar">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                                            <children>
+                                                <StackPane fx:id="userBarAvatarPane" styleClass="user-bar-avatar-wrap" />
+                                                <VBox spacing="2" styleClass="user-bar-identity">
+                                                    <children>
+                                                        <Label fx:id="userBarNameLabel" text="Guest" styleClass="user-bar-name" />
+                                                        <Label fx:id="userBarStatusLabel" text="Offline" styleClass="user-bar-status" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </HBox>
+                                        <Button fx:id="userBarPresenceButton" onAction="#showStatusPickerModal" styleClass="rail-action-button,user-bar-action,user-bar-presence-button" />
+                                        <Button fx:id="editProfileButton" onAction="#showEditProfileModal" styleClass="rail-action-button,user-bar-action" />
+                                        <Button fx:id="logoutButton" onAction="#logout" styleClass="rail-action-button,user-bar-action" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <SplitPane fx:id="messageMemberSplit" dividerPositions="0.76" styleClass="chat-content-split">
+                    <items>
+                        <BorderPane styleClass="chat-pane">
+                            <top>
+                                <VBox spacing="4" styleClass="chat-header">
+                                    <padding>
+                                        <Insets top="10" right="10" bottom="0" left="10" />
+                                    </padding>
+                                    <children>
+                                        <Label text="Discord Lite (LAN)" styleClass="chat-title" />
+                                        <Label fx:id="channelLabel" text="No conversation selected" styleClass="chat-subtitle" />
+                                        <Label fx:id="typingLabel" styleClass="typing-label" />
+                                    </children>
+                                </VBox>
+                            </top>
+                            <center>
+                                <ListView fx:id="messageListView" focusTraversable="false" styleClass="message-list" />
+                            </center>
+                            <bottom>
+                                <VBox styleClass="composer-container">
+                                    <children>
+                                        <HBox fx:id="composerReplyBar" alignment="CENTER_LEFT" spacing="10" styleClass="composer-reply-bar" visible="false" managed="false">
+                                            <children>
+                                                <StackPane fx:id="composerReplyIconPane" />
+                                                <VBox spacing="2" styleClass="composer-reply-meta" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <Label text="Replying to" styleClass="composer-reply-eyebrow" />
+                                                        <Label fx:id="composerReplyLabel" styleClass="composer-reply-label" />
+                                                        <Label fx:id="composerReplySnippetLabel" wrapText="true" styleClass="composer-reply-snippet" />
+                                                    </children>
+                                                </VBox>
+                                                <Button fx:id="clearReplyButton" onAction="#clearComposerReply" styleClass="composer-reply-close" />
+                                            </children>
+                                        </HBox>
+                                        <FlowPane fx:id="composerAttachmentPane" hgap="10" vgap="10" styleClass="composer-attachments" visible="false" managed="false" />
+                                        <HBox fx:id="composerBar" alignment="CENTER_LEFT" spacing="10" styleClass="chat-composer">
+                                            <padding>
+                                                <Insets top="10" right="10" bottom="10" left="10" />
+                                            </padding>
+                                            <children>
+                                                <Button fx:id="attachButton" onAction="#chooseComposerAttachments" styleClass="composer-attach-button" />
+                                                <StackPane fx:id="messageInputStack" styleClass="chat-input-stack" HBox.hgrow="ALWAYS">
+                                                    <children>
+                                                        <TextFlow fx:id="messageInputPreview" styleClass="chat-input-preview" visible="false" mouseTransparent="true" StackPane.alignment="CENTER_LEFT" />
+                                                        <TextField fx:id="messageInput" promptText="Type a message..." onAction="#sendMessage" styleClass="chat-input" StackPane.alignment="CENTER_LEFT" />
+                                                    </children>
+                                                </StackPane>
+                                                <Button text="Send" defaultButton="true" onAction="#sendMessage" styleClass="toolbar-button,button-brand" />
+                                            </children>
+                                        </HBox>
+                                        <VBox fx:id="composerBlockedPane" spacing="10" styleClass="composer-blocked-pane" visible="false" managed="false">
+                                            <children>
+                                                <Label
+                                                    fx:id="composerBlockedLabel"
+                                                    text="You cannot message this user right now."
+                                                    wrapText="true"
+                                                    styleClass="composer-blocked-label" />
+                                                <Button fx:id="composerBlockedActionButton" styleClass="action-chip,action-chip-primary" visible="false" managed="false" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </bottom>
+                        </BorderPane>
+                        <VBox fx:id="memberPane" minWidth="220" prefWidth="280" styleClass="member-pane">
+                            <children>
+                                <VBox fx:id="channelMemberPane" spacing="8" styleClass="member-section" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label fx:id="memberHeaderLabel" text="MEMBERS" styleClass="member-heading" />
+                                        <TextField fx:id="memberSearchField" promptText="Search members" styleClass="member-search" />
+                                        <ListView fx:id="memberListView" focusTraversable="false" styleClass="member-list" VBox.vgrow="ALWAYS" />
+                                    </children>
+                                </VBox>
+                                <VBox fx:id="dmProfilePane" spacing="10" styleClass="member-section,dm-profile-pane" visible="false" managed="false" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label text="PROFILE" styleClass="member-heading" />
+                                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="dm-profile-scroll" VBox.vgrow="ALWAYS">
+                                            <content>
+                                                <VBox fx:id="dmProfileContent" spacing="14" styleClass="dm-profile-content" />
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </items>
+                </SplitPane>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>

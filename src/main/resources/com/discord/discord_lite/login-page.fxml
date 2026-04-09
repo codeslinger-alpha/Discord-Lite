@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" styleClass="auth-root">
+    <children>
+        <Region styleClass="auth-mesh" />
+        <Region styleClass="auth-glow,auth-glow-primary" StackPane.alignment="TOP_LEFT" />
+        <Region styleClass="auth-glow,auth-glow-secondary" StackPane.alignment="TOP_RIGHT" />
+        <Region styleClass="auth-glow,auth-glow-tertiary" StackPane.alignment="BOTTOM_CENTER" />
+        <Region styleClass="auth-horizon" StackPane.alignment="BOTTOM_CENTER" />
+        <HBox alignment="CENTER" spacing="42" styleClass="auth-shell,auth-shell-compact">
+            <children>
+                <VBox spacing="16" styleClass="auth-hero" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="RETURN TO YOUR SERVER" styleClass="auth-eyebrow" />
+                        <Label
+                            text="Log in and drop back into the conversation."
+                            styleClass="auth-hero-title"
+                            wrapText="true" />
+                        <Label
+                            text="Reconnect to your LAN server, pick up unread messages, and jump between rooms instantly."
+                            styleClass="auth-hero-subtitle"
+                            wrapText="true" />
+                        <HBox spacing="10" styleClass="auth-chip-row">
+                            <children>
+                                <Label text="Live rooms" styleClass="auth-chip" />
+                                <Label text="Direct messages" styleClass="auth-chip" />
+                                <Label text="Presence + typing" styleClass="auth-chip" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="14" styleClass="auth-card,auth-form-card" maxWidth="460">
+                    <children>
+                        <VBox alignment="CENTER" spacing="4">
+                            <children>
+                                <Label text="Welcome back!" styleClass="auth-title" />
+                                <Label text="We're so excited to see you again!" styleClass="auth-subtitle" />
+                            </children>
+                        </VBox>
+                        <GridPane hgap="12" vgap="10" styleClass="auth-form">
+                            <children>
+                                <Label text="HOST" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label text="PORT" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <TextField fx:id="loginHostField" styleClass="auth-input" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <TextField fx:id="loginPortField" styleClass="auth-input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label text="USERNAME" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" />
+                                <TextField
+                                    fx:id="loginUsernameField"
+                                    promptText="Email or Username"
+                                    styleClass="auth-input"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="3"
+                                    GridPane.columnSpan="2" />
+                                <Label text="PASSWORD" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" />
+                                <PasswordField
+                                    fx:id="loginPasswordField"
+                                    promptText="Password"
+                                    styleClass="auth-input"
+                                    onAction="#loginFromPage"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="5"
+                                    GridPane.columnSpan="2" />
+                                <Label
+                                    fx:id="loginErrorLabel"
+                                    styleClass="auth-error"
+                                    visible="false"
+                                    managed="false"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="6"
+                                    GridPane.columnSpan="2" />
+                                <Button
+                                    text="Login"
+                                    defaultButton="true"
+                                    onAction="#loginFromPage"
+                                    styleClass="auth-primary-button"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="7"
+                                    GridPane.columnSpan="2" />
+                                <HBox spacing="12" styleClass="auth-links" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2">
+                                    <children>
+                                        <Button text="Back" onAction="#showWelcomePageFromLogin" styleClass="auth-back-button" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button
+                                            text="Need an account? Register"
+                                            onAction="#showRegisterPageFromLogin"
+                                            styleClass="auth-link-button" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>

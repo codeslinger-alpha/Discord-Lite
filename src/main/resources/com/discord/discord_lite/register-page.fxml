@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" styleClass="auth-root">
+    <children>
+        <Region styleClass="auth-mesh" />
+        <Region styleClass="auth-glow,auth-glow-primary" StackPane.alignment="TOP_LEFT" />
+        <Region styleClass="auth-glow,auth-glow-secondary" StackPane.alignment="TOP_RIGHT" />
+        <Region styleClass="auth-glow,auth-glow-tertiary" StackPane.alignment="BOTTOM_CENTER" />
+        <Region styleClass="auth-horizon" StackPane.alignment="BOTTOM_CENTER" />
+        <HBox alignment="CENTER" spacing="42" styleClass="auth-shell,auth-shell-compact">
+            <children>
+                <VBox spacing="16" styleClass="auth-hero" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="START SOMETHING NEW" styleClass="auth-eyebrow" />
+                        <Label
+                            text="Create a profile and join your first community."
+                            styleClass="auth-hero-title"
+                            wrapText="true" />
+                        <Label
+                            text="Choose your display name, lock in a unique username, add an optional avatar, and connect to your server in one flow."
+                            styleClass="auth-hero-subtitle"
+                            wrapText="true" />
+                        <HBox spacing="10" styleClass="auth-chip-row">
+                            <children>
+                                <Label text="Unique usernames" styleClass="auth-chip" />
+                                <Label text="Invite-based servers" styleClass="auth-chip" />
+                                <Label text="Dark, focused UI" styleClass="auth-chip" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="14" styleClass="auth-card,auth-form-card" maxWidth="460">
+                    <children>
+                        <VBox alignment="CENTER" spacing="4">
+                            <children>
+                                <Label text="Create your account" styleClass="auth-title" />
+                                <Label text="Join your server and start chatting." styleClass="auth-subtitle" />
+                            </children>
+                        </VBox>
+                        <GridPane hgap="12" vgap="10" styleClass="auth-form">
+                            <children>
+                                <Label text="HOST" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label text="PORT" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <TextField fx:id="registerHostField" styleClass="auth-input" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <TextField fx:id="registerPortField" styleClass="auth-input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <Label text="DISPLAY NAME" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" />
+                                <TextField
+                                    fx:id="registerNameField"
+                                    promptText="Display Name"
+                                    styleClass="auth-input"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="3"
+                                    GridPane.columnSpan="2" />
+                                <Label text="USERNAME" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2" />
+                                <HBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2">
+                                    <children>
+                                        <TextField
+                                            fx:id="registerUsernameField"
+                                            promptText="Username"
+                                            styleClass="auth-input"
+                                            HBox.hgrow="ALWAYS" />
+                                        <Button text="Suggest" onAction="#suggestUsernameFromRegister" styleClass="auth-link-button" />
+                                    </children>
+                                </HBox>
+                                <Label
+                                    fx:id="registerUsernameHintLabel"
+                                    text="Usernames are unique and cannot be changed later."
+                                    styleClass="auth-hint"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="6"
+                                    GridPane.columnSpan="2" />
+                                <Label text="PROFILE PICTURE (OPTIONAL)" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2" />
+                                <HBox alignment="CENTER_LEFT" spacing="12" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2">
+                                    <children>
+                                        <StackPane fx:id="registerAvatarPreview" styleClass="register-avatar-preview" />
+                                        <VBox spacing="6">
+                                            <children>
+                                                <Button text="Choose Picture" onAction="#chooseRegisterAvatarFromPage" styleClass="auth-link-button" />
+                                                <Button text="Remove" onAction="#clearRegisterAvatarFromPage" styleClass="auth-link-button" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <Label text="PASSWORD" GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2" />
+                                <PasswordField
+                                    fx:id="registerPasswordField"
+                                    promptText="Password"
+                                    styleClass="auth-input"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="10"
+                                    GridPane.columnSpan="2" />
+                                <Label text="CONFIRM PASSWORD" GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.columnSpan="2" />
+                                <PasswordField
+                                    fx:id="registerConfirmPasswordField"
+                                    promptText="Confirm Password"
+                                    styleClass="auth-input"
+                                    onAction="#registerFromPage"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="12"
+                                    GridPane.columnSpan="2" />
+                                <Label
+                                    fx:id="registerErrorLabel"
+                                    styleClass="auth-error"
+                                    visible="false"
+                                    managed="false"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="13"
+                                    GridPane.columnSpan="2" />
+                                <Button
+                                    text="Create Account"
+                                    defaultButton="true"
+                                    onAction="#registerFromPage"
+                                    styleClass="auth-primary-button"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="14"
+                                    GridPane.columnSpan="2" />
+                                <HBox spacing="12" styleClass="auth-links" GridPane.columnIndex="0" GridPane.rowIndex="15" GridPane.columnSpan="2">
+                                    <children>
+                                        <Button text="Back" onAction="#showWelcomePageFromRegister" styleClass="auth-back-button" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Button
+                                            text="Already have an account? Login"
+                                            onAction="#showLoginPageFromRegister"
+                                            styleClass="auth-link-button" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</StackPane>
